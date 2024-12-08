@@ -32,12 +32,14 @@ class WheatherAPI {
         })
           return this.fetchData<ForecastData>(url)
     }
-    async getReverseGeoCode({lat,lon} : Coordinates ) : Promise <GeocodingResponse>{
+    async getReverseGeoCode({lat,lon} : Coordinates ) : Promise <GeocodingResponse[]>{
         const url = await this.createUrl(`${API_CONFIG.GEO}/reverse` , {
             lat:lat.toString(),
             lon:lon.toString(),
             limit:"5"
         })
-        return this.fetchData<GeocodingResponse>(url)
+        return this.fetchData<GeocodingResponse[]>(url)
     }
 }
+
+export const weatherAPI = new WheatherAPI();
