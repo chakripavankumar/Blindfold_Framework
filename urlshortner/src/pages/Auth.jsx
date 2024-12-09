@@ -3,7 +3,7 @@
 const Auth = () => {
   return (
     <div>
-      
+      hello mowsaaa
     </div>
   )
 }
