@@ -6,12 +6,14 @@ import Auth from "./pages/Auth"
 import Link from "./pages/Link"
 import RedirectLink from "./pages/RedirectLink"
 import { ThemeProvider } from "./theme/theme-provider"
+import UrlProvider from "./context"
 
 
 
 function App() {
  return (
-   <BrowserRouter>
+  <UrlProvider>
+<BrowserRouter>
    <ThemeProvider defaultTheme="dark">
    <AppLayout>
     <Routes>
@@ -26,6 +28,8 @@ function App() {
    </ThemeProvider>
    
    </BrowserRouter>
+  </UrlProvider>
+   
 
   )
 }
