@@ -1,23 +1,18 @@
-import Header from "@/components/Header"
+import Header from "@/components/header";
+import {Outlet} from "react-router-dom";
 
-// eslint-disable-next-line react/prop-types
-const AppLayout = ({children})=>{
-    return(
-        <div>
-        <Header/>
-     
-        <main className="min-h-screen container">
-            {children}
-        
+const AppLayout = () => {
+  return (
+    <div>
+      <main className="min-h-screen container">
+        <Header />
+        <Outlet />
+      </main>
+      <div className="p-10 text-center bg-gray-800 mt-10">
+        Made with 💗 by coder
+      </div>
+    </div>
+  );
+};
 
-        </main>
-        <footer >
-           <div className="p-10 text-center bg-gray-800 mt-10">
-            madw with love ny pavan❤️
-           </div>
-        </footer>
-        </div>
-    )
-}
-
-export default AppLayout
+export default AppLayout;

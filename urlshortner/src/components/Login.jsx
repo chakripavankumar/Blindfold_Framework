@@ -36,7 +36,7 @@ const Login = () => {
               fetchUser();
         }
 
-     },[data,error])
+     },[data, error])
      const handleLogin = async ()=>{
     setErrors([])
     try {

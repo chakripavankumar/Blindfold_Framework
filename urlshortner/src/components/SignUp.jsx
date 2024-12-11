@@ -40,7 +40,7 @@ const SignUp = () => {
               fetchUser();
         }
 
-     },[loading,error])
+     },[loading, error])
      const handleSignUp = async ()=>{
     setErrors([])
     try {

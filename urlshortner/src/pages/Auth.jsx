@@ -14,18 +14,18 @@ const Auth = () => {
   useEffect(() => {
     if (isAuthenticated && !loading)
       navigate(`/dashboard?${longLink ? `createNew=${longLink}` : ""}`);
-  }, [isAuthenticated, loading, navigate]);
+  }, [isAuthenticated]);
   return (
-    <div className="mt-20 flex flex-col items-center gap-10">
+    <div className="mt-36 flex flex-col items-center gap-10">
      <h1 className="text-5xl font-extrabold">
   { searchParams.get("createNew")?"Hold Up! Let's login frist" : "Login / SignUp"}
      </h1>
-     <Tabs defaultValue="signup" className="w-[400px]">
+     <Tabs defaultValue="login" className="w-[400px]">
   <TabsList className="grid w-full grid-cols-2">
-    <TabsTrigger value="account">Login</TabsTrigger>
-    <TabsTrigger value="password">Signup</TabsTrigger>
+    <TabsTrigger value="login">Login</TabsTrigger>
+    <TabsTrigger value="signup">Signup</TabsTrigger>
   </TabsList>
-  <TabsContent value="Login">
+  <TabsContent value="login">
     <Login/>
     </TabsContent>
   <TabsContent value="signup">
