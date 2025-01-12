@@ -3,6 +3,7 @@ import { ClerkProvider } from "@clerk/nextjs";
 import "./globals.css";
 import Header from "@/components/header";
 import React, { ReactNode } from "react";
+import { Toaster } from "@/components/ui/sonner";
 
 // Import the Inter font
 const inter = Inter({ subsets: ["latin"] });
@@ -24,6 +25,7 @@ export default function RootLayout({ children }: RootLayoutProps) {
         <body className={`${inter.className}`}>
           <Header />
           <main className="min-h-screen">{children}</main>
+          <Toaster richColors/>
           <footer className="bg-blue-50 py-12">
             <div className="container mx-auto px-4 text-center">
               <p>© 2025 Wealth. All rights reserved.</p>

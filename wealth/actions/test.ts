@@ -1,7 +1,7 @@
 import { db } from "@/lib/Prisma";
 import { auth } from "@clerk/nextjs/server";
 import { revalidatePath } from "next/cache";
-import { Decimal } from "@prisma/client/runtime/library"; 
+
 // Define the AccountType interface based on the Prisma schema
 interface AccountType {
   id: string;

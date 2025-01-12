@@ -8,6 +8,8 @@ import { Input } from "./ui/input"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "./ui/select"
 import { Switch } from "./ui/switch"
 import { Button } from "./ui/button"
+import useFetch from "@/hooks/use-Fetch"
+import { CreateAccount } from "@/actions/dash"
 
 interface CreateAccountDrawerPtops{
     children:ReactNode
@@ -27,7 +29,11 @@ const CreateAccountDrawer = ({children} :CreateAccountDrawerPtops) => {
         balance:"",
         isDefault:false,
     },
-    })
+    });
+
+    const{
+        data:newAccount
+    } = useFetch(createAccount);
     const onsubmit= async (data)=>{
         console.log(data);
         
