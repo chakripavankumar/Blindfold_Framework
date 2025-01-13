@@ -15,54 +15,54 @@ datasource db {
 }
 
 model User {
-  id String @id @default(uuid())
+  id          String @id @default(uuid())
   clerkUserId String @unique
-  email String @unique
-  name String?
-  imageUrl String?
+  email       String @unique
+  name        String?
+  imageUrl    String?
   transactions Transactions[]
-  accounts Account[]
-  budgets Budget[]
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  accounts     Account[]
+  budgets      Budget[]
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
 
   @@map("users")
 }
 
 model Account{
-  id String @id @default(uuid())
-  name String
-  type String
-  balance Decimal @default(0)
-  isDefault Boolean @default(false)
-  userId String
-  user User @relation(fields: [userId], references: [id],onDelete: Cascade)
+  id         String @id @default(uuid())
+  name       String
+  type       String
+  balance    Decimal @default(0)
+  isDefault  Boolean @default(false)
+  userId     String
+  user       User @relation(fields: [userId], references: [id],onDelete: Cascade)
   transactions Transactions[]
-  createdAt  DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
 
   @@index([userId])
   @@map("accounts")
  }
  model Transactions{
-   id String @id @default(uuid())
-   type TranscationType
-   amount Decimal
-   description String?
-  date DateTime
-  category String
-  receiptUrl String?
-  isRecurring Boolean @default(false)
-  recurringInterval  RecurringInterval
+   id            String @id @default(uuid())
+   type          TranscationType
+   amount        Decimal
+   description   String?
+  date           DateTime
+  category       String
+  receiptUrl     String?
+  isRecurring    Boolean @default(false)
+  recurringInterval     RecurringInterval
   nextRecurringInterval DateTime?
-  lastProcessed DateTime?
-  status TranscationStutus  @default(COMPLETED)
-  userId String
-  user  User @relation(fields: [userId],references: [id],onDelete: Cascade)
-  accountId String
-  account  Account @relation(fields: [accountId] ,references: [id], onDelete: Cascade)
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  lastProcessed         DateTime?
+  status                TranscationStutus  @default(COMPLETED)
+  userId                String
+  user                  User @relation(fields: [userId],references: [id],onDelete: Cascade)
+  accountId             String
+  account               Account @relation(fields: [accountId] ,references: [id], onDelete: Cascade)
+  createdAt             DateTime @default(now())
+  updatedAt             DateTime @updatedAt
 
   @@index([userId])
   @@index ([accountId])
@@ -72,13 +72,13 @@ model Account{
  }
  
   model Budget {
-  id String @id @default(uuid())
-  amount  Decimal
-  lastAlertSent DateTime?
-  userId String @unique
-  user User @relation(fields: [userId],references: [id],onDelete: Cascade)
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  id             String @id @default(uuid())
+  amount         Decimal
+  lastAlertSent  DateTime?
+  userId         String @unique
+  user           User @relation(fields: [userId],references: [id],onDelete: Cascade)
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
 
   @@index([userId])
   @@map("budgets")

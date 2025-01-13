@@ -1,11 +1,10 @@
 import { currentUser } from "@clerk/nextjs/server";
 import { db } from "./Prisma";
 
-// Define the return type explicitly
-export const CheckUser = async () => {
-  // Use Clerk's user type for better type safety
-  const user = await currentUser();
 
+export const CheckUser = async () => {
+
+  const user = await currentUser();
   if (!user) {
     return null;
   }
@@ -30,15 +29,13 @@ export const CheckUser = async () => {
         email: user.emailAddresses[0]?.emailAddress || "",
       },
     });
-
-    return newUser; // Ensure new user is returned
+    return newUser; 
   } catch (error: unknown) {
-    // Ensure proper error handling
     if (error instanceof Error) {
       console.error(error.message);
     } else {
       console.error("An unknown error occurred.");
     }
-    return null; // Return null in case of error
+    return null; 
   }
 };

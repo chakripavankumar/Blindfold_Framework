@@ -12,7 +12,7 @@ type UseFetchReturnType<T> = {
 
 function useFetch<T>(cb: (...args: any[]) => Promise<T>): UseFetchReturnType<T> {
   const [data, setData] = useState<T | undefined>(undefined);
-  const [loading, setLoading] = useState<boolean | null>(null);
+  const [loading, setLoading] = useState(false);
   const [error, setError] = useState<Error | null>(null);
 
   const fn = async (...args: any[]) => {
