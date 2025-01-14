@@ -4,24 +4,20 @@ import { db } from "@/lib/Prisma";
 import { auth } from "@clerk/nextjs/server";
 import { revalidatePath } from "next/cache";
 
-// Helper function to serialize transactions
 const serializeTransaction = (obj: {
-  amount?: any; // Optional since not all objects will have these fields
+  amount?: any; 
   balance?: any;
   userId: string;
   name: string;
   id: string;
-  createdAt: Date;
-  updatedAt: Date;
-  type: string;
   isDefault: boolean;
 }) => {
   const serialized = { ...obj };
   if (obj.balance) {
-    serialized.balance = Number(obj.balance); // Ensure balance is a number
+    serialized.balance = Number(obj.balance); 
   }
   if (obj.amount) {
-    serialized.amount = Number(obj.amount); // Ensure amount is a number
+    serialized.amount = Number(obj.amount); 
   }
   return serialized;
 };
