@@ -1,11 +1,11 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 "use server";
 
 import { db } from "@/lib/Prisma";
 import { subDays } from "date-fns";
 
-// Constants
-const ACCOUNT_ID = "account-id";
-const USER_ID = "user-id";
+const ACCOUNT_ID = "5d19e698-2921-45ea-90fd-111e5253725a";
+const USER_ID = "ffb16ddd-f2f6-4f05-a2e6-b148b2aa51ce";
 
 // Category type
 type Category = {
@@ -26,6 +26,7 @@ type TransactionData = {
   accountId: string;
   createdAt: Date;
   updatedAt: Date;
+  recurringInterval?: string; // Added recurringInterval
 };
 
 // Categories with their typical amount ranges
@@ -93,6 +94,7 @@ export async function seedTransactions(): Promise<{ success: boolean; message?: 
           accountId: ACCOUNT_ID,
           createdAt: date,
           updatedAt: date,
+          recurringInterval: type === "EXPENSE" ? "MONTHLY" : undefined, // Assign recurringInterval dynamically
         };
 
         totalBalance += type === "INCOME" ? amount : -amount;
@@ -108,9 +110,13 @@ export async function seedTransactions(): Promise<{ success: boolean; message?: 
       });
 
       // Insert new transactions
-      await tx.transactions.createMany({
-        data: transactions,
-      });
+      const BATCH_SIZE = 500; // Customize based on performance
+      for (let i = 0; i < transactions.length; i += BATCH_SIZE) {
+        const batch = transactions.slice(i, i + BATCH_SIZE);
+        await db.transactions.createMany({
+          data: batch,
+        });
+      }
 
       // Update account balance
       await tx.account.update({
@@ -124,7 +130,7 @@ export async function seedTransactions(): Promise<{ success: boolean; message?: 
       message: `Created ${transactions.length} transactions`,
     };
   } catch (error: any) {
-    console.error("Error seeding transactions:", error);
+    console.error("Error message is: " + error.message);
     return { success: false, error: error.message };
   }
 }

@@ -53,7 +53,7 @@ model Account{
   category       String
   receiptUrl     String?
   isRecurring    Boolean @default(false)
-  recurringInterval     RecurringInterval
+  recurringInterval     RecurringInterval?
   nextRecurringInterval DateTime?
   lastProcessed         DateTime?
   status                TranscationStutus  @default(COMPLETED)

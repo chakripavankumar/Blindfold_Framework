@@ -1,6 +1,9 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { getAccountWithTranscations } from "@/actions/account";
 import NotFound from "@/app/not-found";
+import { Suspense } from "react";
+import TranscationsTable from "../_components/TranscationsTable";
+import { BarLoader } from "react-spinners";
 
 // Transaction Type
 interface Transaction {
@@ -55,6 +58,11 @@ const Page = async ({ params }: PageProps) => {
         <p className="text-sm text-muted-foreground">{account._count.transactions} Transactions</p>
       </div>
       </div>
+      <Suspense
+      fallback={<BarLoader className="mt-4" width={"100%"} color="#9393ea"/>}
+      >
+        <TranscationsTable transactions={transactions} />
+      </Suspense>
       </div>
   
   );};
