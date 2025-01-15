@@ -2,7 +2,8 @@ import { getUserAccounts } from "@/actions/dasboard"
 import CreateAccountDrawer from "@/components/CreateAccountDrawer"
 import { Card, CardContent } from "@/components/ui/card"
 import { Plus } from "lucide-react"
-import AccountCard from "./_components/AccountCard"
+import { AccountCard } from "./_components/AccountCard"
+
 
 
 const DashboardPage =  async() => {

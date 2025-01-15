@@ -5,24 +5,27 @@ import { Suspense } from "react";
 import TranscationsTable from "../_components/TranscationsTable";
 import { BarLoader } from "react-spinners";
 
-// Transaction Type
+
 interface Transaction {
   id: string;
-  amount: number; // Serialized to number
-  date: string; // Assuming ISO date string format
+  amount: number;
+  date: string; 
+  description: string; 
+  category: string; 
+  type: "INCOME" | "EXPENSE"; 
 }
 
-// AccountData Type
+
 interface AccountData {
   id: string;
   name: string;
   type: string;
-  balance: number; // Serialized to a number
+  balance: number; 
   isDefault: boolean;
   _count: {
-    transactions: number; // Count of transactions
+    transactions: number; 
   };
-  transactions: Transaction[]; // List of transactions
+  transactions: Transaction[]; 
 }
 
 // PageProps Type
