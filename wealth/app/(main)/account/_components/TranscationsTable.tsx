@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable @typescript-eslint/no-unused-expressions */
 "use client";
+import { bulkDeleteTransactions } from "@/actions/account";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
@@ -23,11 +24,14 @@ import {
 } from "@/components/ui/table";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 import { categoryColors } from "@/data/categories";
+import useFetch from "@/hooks/use-Fetch";
 import { format } from "date-fns";
 import { ChevronDown, ChevronUp, Clock, MoreHorizontal, RefreshCw, Search, Trash, X } from "lucide-react";
 import { setConfig } from "next/config";
 import { useRouter } from "next/navigation";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
+import { BarLoader } from "react-spinners";
+import { toast } from "sonner";
 
 interface Transaction {
   id: string;
@@ -70,7 +74,6 @@ const TransactionsTable: React.FC<TransactionsTableProps> = ({ transactions, del
       direction: current.field === field && current.direction === "asc" ? "desc" : "asc",
     }));
   };
- const handleDBulkDelete = ()=>{}
  const handleClearFilters= ()=>{
   SetSerachTerms(""),
   SetypeFilter(""),
@@ -126,6 +129,28 @@ const TransactionsTable: React.FC<TransactionsTableProps> = ({ transactions, del
       current.length === transactions.length ? [] : transactions.map((t) => t.id)
     );
   };
+  const {
+    loading: deleteLoading,
+    fn: deleteFun,
+    data: deleted,
+  } = useFetch(bulkDeleteTransactions);
+
+  const handleBulkDelete = async () => {
+    if (
+      !window.confirm(
+        `Are you sure you want to delete ${selectedIds.length} transactions?`
+      )
+    )
+      return;
+
+    deleteFun(selectedIds);
+  };
+
+  useEffect(() => {
+    if (deleted && !deleteLoading) {
+      toast.error("Transactions deleted successfully");
+    }
+  }, [deleted, deleteLoading]);
 
   const isValidDate = (date: string | null | undefined): boolean => {
     if (!date) return false;
@@ -144,7 +169,9 @@ const TransactionsTable: React.FC<TransactionsTableProps> = ({ transactions, del
 
   return (
     <div className="space-y-4">
-      {/* {serach bar} */}
+  {  deleteLoading && (
+    <BarLoader className="mt-4 " width={"100%"} color="#9393ea"/>)}
+    
       <div className="flex flex-col sm:flex-row gap-4">
         <div className="relative flex-1">
           <Search className="absolute left-2 top-2.5 h-4 w-4 text-muted-foreground "/>
@@ -175,7 +202,7 @@ const TransactionsTable: React.FC<TransactionsTableProps> = ({ transactions, del
 </Select>
 {selectedIds.length>0 &&(
   <div className="flex items-center gap-2">
-    <Button variant="destructive" size="sm" onClick={handleDBulkDelete}>
+    <Button variant="destructive" size="sm" onClick={handleBulkDelete}>
     <Trash className="h-4 m-4 mr-2"/>
     Delete selected ({selectedIds.length})
     </Button>
