@@ -3,6 +3,7 @@
 
 import { db } from "@/lib/Prisma";
 import { auth } from "@clerk/nextjs/server";
+import { error } from "console";
 import { revalidatePath } from "next/cache";
 
 const serializeTransaction = (obj: {
@@ -75,4 +76,63 @@ export async function getAccountWithTranscations(accountid:string){
         ...serializeTransaction(account),
         transactions : account.transactions.map(serializeTransaction)
     }
+}
+
+export async function bulkDeleteTransactions( transactionIds){
+   try {
+    const {userId} = await auth();
+    if(!userId) throw new  Error ( "unauthorized");
+
+    const user = await db.user.findUnique({
+     where: {clerkUserId : userId}
+   })
+   if (!user) throw new Error("User not found");
+
+   const transactions = await db.transactions. findMany({
+      where:{
+        id: {in:transactionIds},
+        userId:user.id,
+      }
+   })
+   const accountBlanceChanges =  transactions.reduce((acc,transaction)=>{
+    const change =
+    transaction.type  === "EXPENSE"
+    ?transaction.amount
+    :-transaction.amount;
+    acc[transaction.accountId]=(acc[transaction.accountId] || 0) + change;
+    return acc;
+   }, {})
+
+   await db.$transaction(async (tx) => {
+    // Delete transactions
+    await tx.transactions.deleteMany({
+      where: {
+        id: { in: transactionIds },
+        userId: user.id,
+      },
+    });
+    // Update account balances
+    for (const [accountId, balanceChange] of Object.entries(
+      accountBlanceChanges
+    )) {
+      await tx.account.update({
+        where: { id: accountId },
+        data: {
+          balance: {
+            increment: balanceChange,
+          },
+        },
+      });
+    }
+  });
+
+  revalidatePath("/dashboard");
+  revalidatePath("/account/[id]");
+
+  return { success: true };
+   }
+   
+   catch (error) {
+    return { success: false, error: error.message };
+  }
 }

@@ -4,7 +4,7 @@
 import { db } from "@/lib/Prisma";
 import { subDays } from "date-fns";
 
-const ACCOUNT_ID = "5d19e698-2921-45ea-90fd-111e5253725a";
+const ACCOUNT_ID = "a7843b9b-0b6a-44d5-beda-4ca6a02b665b";
 const USER_ID = "ffb16ddd-f2f6-4f05-a2e6-b148b2aa51ce";
 
 // Category type
@@ -26,26 +26,26 @@ type TransactionData = {
   accountId: string;
   createdAt: Date;
   updatedAt: Date;
-  recurringInterval?: string; // Added recurringInterval
+  recurringInterval?: string; 
 };
 
 // Categories with their typical amount ranges
 const CATEGORIES: Record<"INCOME" | "EXPENSE", Category[]> = {
   INCOME: [
-    { name: "salary", range: [5000, 8000] },
+    { name: "salary", range: [6000, 9000] },
     { name: "freelance", range: [1000, 3000] },
-    { name: "investments", range: [500, 2000] },
+    { name: "investments", range: [1000, 3000] },
     { name: "other-income", range: [100, 1000] },
   ],
   EXPENSE: [
-    { name: "housing", range: [1000, 2000] },
-    { name: "transportation", range: [100, 500] },
-    { name: "groceries", range: [200, 600] },
-    { name: "utilities", range: [100, 300] },
-    { name: "entertainment", range: [50, 200] },
-    { name: "food", range: [50, 150] },
-    { name: "shopping", range: [100, 500] },
-    { name: "healthcare", range: [100, 1000] },
+    { name: "housing", range: [3000, 5000] },
+    { name: "transportation", range: [1000, 3000] },
+    { name: "groceries", range: [2000, 6000] },
+    { name: "utilities", range: [1000, 3000] },
+    { name: "entertainment", range: [500, 2000] },
+    { name: "food", range: [500, 1500] },
+    { name: "shopping", range: [1000, 5000] },
+    { name: "healthcare", range: [1000, 10000] },
     { name: "education", range: [200, 1000] },
     { name: "travel", range: [500, 2000] },
   ],
@@ -71,14 +71,14 @@ export async function seedTransactions(): Promise<{ success: boolean; message?: 
     const transactions: TransactionData[] = [];
     let totalBalance = 0;
 
-    for (let i = 90; i >= 0; i--) {
+    for (let i = 30; i >= 0; i--) {
       const date = subDays(new Date(), i);
 
       // Generate 1-3 transactions per day
-      const transactionsPerDay = Math.floor(Math.random() * 3) + 1;
+      const transactionsPerDay = Math.floor(Math.random() * 2) + 1;
 
       for (let j = 0; j < transactionsPerDay; j++) {
-        // 40% chance of income, 60% chance of expense
+        // 50% chance of income, 60% chance of expense
         const type: "INCOME" | "EXPENSE" = Math.random() < 0.4 ? "INCOME" : "EXPENSE";
         const { category, amount } = getRandomCategory(type);
 
@@ -94,7 +94,7 @@ export async function seedTransactions(): Promise<{ success: boolean; message?: 
           accountId: ACCOUNT_ID,
           createdAt: date,
           updatedAt: date,
-          recurringInterval: type === "EXPENSE" ? "MONTHLY" : undefined, // Assign recurringInterval dynamically
+          recurringInterval: type === "EXPENSE" ? "MONTHLY" : undefined, 
         };
 
         totalBalance += type === "INCOME" ? amount : -amount;
